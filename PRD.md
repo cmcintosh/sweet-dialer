@@ -1,0 +1,77 @@
+# Agile Plan: Twilio AI-Powered Dialer for SuiteCRM
+
+## E1 — Package Foundation & Module Scaffolding (30 pts)
+- S-001: Create directory structure (manifest, ModuleInstall/, custom/modules/, custom/include/TwilioDialer/) (3 pts)
+- S-002: Write install.php with DB migration triggers (3 pts)
+- S-003: Write uninstall.php with table drops and file cleanup (3 pts)
+- S-004-S-008: Create 11 database tables (settings, calls, voicemail, recordings, opted_out, dual_ringtone, hold_ringtone, common_settings, error_logs, logger, phone_numbers) (17 pts)
+- S-009-S-011: Scaffold SuiteCRM module metadata (vardefs, language, viewdefs, menus) for all modules (9 pts)
+
+## E2 — Relationships & Navigation (24 pts)
+- S-012-S-016: Define module relationships (CTI Settings → Users, CTI Settings → Voicemail, CTI Calls → Settings, Polymorphic to Contacts/Leads/Targets/Cases, Calls → Accounts) (15 pts)
+- S-017: Build Twilio Settings sidebar with all links (5 pts)
+- S-018-S-019: Add to Admin panel and top navigation (4 pts)
+
+## E3 — CTI Settings Module (34 pts)
+- S-020-S-025: CTI edit form with all fields, validation, color pickers, file uploads (18 pts)
+- S-026-S-027: CTI list view and detail view with validation message (5 pts)
+- S-028-S-030: Multi-agent, multi-number logic and Partner Agents view (9 pts)
+- S-031: Incoming Call Settings filtered view (2 pts)
+
+## E4 — Twilio API Client & Credentials (38 pts)
+- S-032-S-034: Core Twilio API client with retry logic and credential validation (11 pts)
+- S-035-S-036: Credential validation on CTI save hooks (8 pts)
+- S-037-S-039: Auto-fetch phone numbers from Twilio, populate in forms (13 pts)
+- S-040-S-041: Access token generation with JWT and entrypoint (8 pts)
+- S-042-S-043: AES-256 encryption for auth_token and api_key_secret (7 pts)
+
+## E5 — Webhook Endpoints & TwiML Handling (39 pts)
+- S-044-S-045: Webhook infrastructure with signature validation, 8 endpoint registrations (8 pts)
+- S-046-S-047: Outbound call routing with recording (7 pts)
+- S-048-S-049: Inbound call routing with timeout and voicemail fallback (11 pts)
+- S-050-S-051: Voicemail flow with TTS/audio playback and recording save (8 pts)
+- S-052-S-053: Hold music and DTMF handlers (5 pts)
+
+## E6 — Call Status & Record Logging (29 pts)
+- S-054-S-056: Status callback processing, call classification, CRM record matching (13 pts)
+- S-057-S-058: Recording callback processing with secure playback proxy (8 pts)
+- S-059-S-060: Auto-save for random calls, auto-create contacts (8 pts)
+
+## E7 — Dialer Frontend: Twilio Client SDK (36 pts)
+- S-061-S-063: SDK initialization, token refresh, error handling (14 pts)
+- S-064-S-065: Outbound call initiation with state management (8 pts)
+- S-066-S-068: Inbound call handling with answer/reject/end (9 pts)
+- S-069-S-071: Call controls (mute, DTMF, hold/unhold) (7 pts)
+
+## E8 — Dialer Frontend UI Components (53 pts)
+- S-072-S-074: Click-to-call buttons on phone fields (10 pts)
+- S-075-S-076: Standalone dialer widget in header (8 pts)
+- S-077-S-079: Calling overlay container, caller info, status indicator (16 pts)
+- S-080-S-083: In-call control buttons (mute, hold, keypad) (12 pts)
+- S-084-S-086: Notes and Call History panels (7 pts)
+
+## E9 — Call Transfers (26 pts)
+- S-087-S-088: Transfer agent selector with search/filter (7 pts)
+- S-089-S-090: Cold transfer with call record updates (10 pts)
+- S-091-S-093: Warm transfer conference and handoff with notes passing (15 pts)
+
+## E10 — Voicemail, Ringtones & Ring Timeout (26 pts)
+- S-094-S-096: Voicemail management CRUD and playback (8 pts)
+- S-097-S-099: Dual ringtone management and playback (8 pts)
+- S-100-S-101: Hold ringtone management (4 pts)
+- S-102-S-104: Ring timeout settings with mass assign (6 pts)
+
+## E11 — Call Tracker, Opt-Out & Logging (35 pts)
+- S-105-S-108: Call Tracker list view, inline player, filtering, export (17 pts)
+- S-109-S-111: Opted-out numbers CRUD, opt-out checks, webhook opt-out (9 pts)
+- S-112-S-113: Twilio Logger with level controls (6 pts)
+- S-114: Twilio Error Logs list view (3 pts)
+
+## E12 — Security, Scheduling & Deployment (41 pts)
+- S-115-S-116: Webhook signature validation, token endpoint rate limiting (7 pts)
+- S-117-S-119: Role-based access control for CTI, dialer, Call Tracker (9 pts)
+- S-120-S-124: 4 scheduler jobs (RecordingSync, PhoneNumberSync, LogCleanup, TokenRefresh) (15 pts)
+- S-125-S-126: Health check endpoint and Admin dashboard widget (8 pts)
+- S-127-S-129: Manifest, install.php, uninstall.php finalization (7 pts)
+
+TOTAL: 129 Stories | 421 Points | 12 Epics | Estimated 24 weeks (12 sprints)

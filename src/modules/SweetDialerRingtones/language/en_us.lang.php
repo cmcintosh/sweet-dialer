@@ -1,0 +1,20 @@
+<?php
+$mod_strings['LBL_MODULE_NAME'] = 'Twilio Ringtones';
+$mod_strings['LBL_MODULE_TITLE'] = 'Twilio Ringtones';
+$mod_strings['LBL_DUAL_RINGTONE'] = 'Dual Ringtone';
+$mod_strings['LBL_HOLD_RINGTONE'] = 'Hold Ringtone';
+$mod_strings['LBL_ID'] = 'ID';
+$mod_strings['LBL_NAME'] = 'Name';
+$mod_strings['LBL_FILE'] = 'File';
+$mod_strings['LBL_CATEGORY'] = 'Category';
+$mod_strings['LBL_SUB_CATEGORY'] = 'Sub Category';
+$mod_strings['LBL_ASSIGNED_TO'] = 'Assigned To';
+$mod_strings['LBL_PUBLISH_DATE'] = 'Publish Date';
+$mod_strings['LBL_EXPIRATION_DATE'] = 'Expiration Date';
+$mod_strings['LBL_STATUS'] = 'Status';
+$mod_strings['LBL_DESCRIPTION'] = 'Description';
+$mod_strings['LBL_DATE_CREATED'] = 'Date Created';
+$mod_strings['LBL_DATE_MODIFIED'] = 'Date Modified';
+$mod_strings['LBL_DELETED'] = 'Deleted';
+$mod_strings['LNK_NEW_RECORD'] = 'Create Ringtone';
+$mod_strings['LNK_LIST'] = 'View Ringtones';
