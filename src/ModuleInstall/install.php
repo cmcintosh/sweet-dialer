@@ -4,157 +4,154 @@
  *
  * Creates database tables and registers custom modules in SuiteCRM.
  * Idempotent - safe to run multiple times.
- *
- * @package SweetDialer
- * @author Wembassy
- * @license GNU AGPLv3
  */
 
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-/**
- * Main post-install function - triggered after package installation
- */
 function post_install()
 {
-    global \$db, \$sugar_config;
-
-    \$GLOBALS['log']->debug('Sweet-Dialer: Starting post_install...');
+    global $db;
+    $GLOBALS['log']->debug('Sweet-Dialer: Starting post_install...');
 
     try {
-        // Get database instance
-        if (empty(\$db)) {
-            \$db = DBManagerFactory::getInstance();
+        if (empty($db)) {
+            $db = DBManagerFactory::getInstance();
         }
 
-        // Check SuiteCRM environment
-        if (!checkEnvironment(\$db)) {
-            throw new Exception("Sweet-Dialer: Environment check failed. Install aborted.");
+        if (!checkEnvironment($db)) {
+            throw new Exception('Sweet-Dialer: Environment check failed');
         }
 
-        // Run database migrations
-        \$GLOBALS['log']->debug('Sweet-Dialer: Running database migrations...');
-        runMigrations(\$db);
-
-        // Register modules in SuiteCRM's module registry
-        \$GLOBALS['log']->debug('Sweet-Dialer: Registering modules...');
-        registerModules(\$db);
-
-        // Create default scheduler jobs
-        \$GLOBALS['log']->debug('Sweet-Dialer: Creating scheduler jobs...');
-        createSchedulers(\$db);
-
-        // Clear SuiteCRM cache
-        \$GLOBALS['log']->debug('Sweet-Dialer: Clearing cache...');
+        runMigrations($db);
+        registerModules($db);
+        createSchedulers($db);
         repairAndClearAllCache();
+        logInstallVersion($db);
 
-        // Log install completion
-        logInstallVersion(\$db);
+        $GLOBALS['log']->info('Sweet-Dialer: post_install completed');
 
-        \$GLOBALS['log']->info('Sweet-Dialer: post_install completed successfully');
-
-    } catch (Exception \$e) {
-        \$GLOBALS['log']->fatal("Sweet-Dialer: post_install failed: " . \$e->getMessage());
-        throw \$e;
+    } catch (Exception $e) {
+        $GLOBALS['log']->fatal('Sweet-Dialer: ' . $e->getMessage());
+        throw $e;
     }
 }
 
-/**
- * Check SuiteCRM environment compatibility
- */
-function checkEnvironment(\$db)
+function checkEnvironment($db)
 {
-    global \$sugar_config;
+    global $sugar_config;
+    $compatible = true;
 
-    \$compatible = true;
-
-    // Check SuiteCRM version
-    \$suitecrmVersion = isset(\$sugar_config['suitecrm_version']) ? \$sugar_config['suitecrm_version'] : \$sugar_config['sugar_version'];
-    \$GLOBALS['log']->debug("Sweet-Dialer: Detected SuiteCRM version: " . \$suitecrmVersion);
-
-    // Check PHP version (8.0+ preferred, 7.4+ minimum)
-    \$phpVersion = phpversion();
-    if (version_compare(\$phpVersion, '7.4.0', '<')) {
-        \$GLOBALS['log']->error("Sweet-Dialer: PHP version {\$phpVersion} is below minimum required 7.4");
-        \$compatible = false;
+    $phpVersion = phpversion();
+    if (version_compare($phpVersion, '7.4.0', '<')) {
+        $GLOBALS['log']->error("PHP version {$phpVersion} is below minimum 7.4");
+        $compatible = false;
     }
 
-    // Check required PHP extensions
-    \$requiredExtensions = array('openssl', 'json', 'mbstring', 'curl');
-    foreach (\$requiredExtensions as \$ext) {
-        if (!extension_loaded(\$ext)) {
-            \$GLOBALS['log']->error("Sweet-Dialer: Required PHP extension '{\$ext}' not loaded");
-            \$compatible = false;
+    $requiredExtensions = array('openssl', 'json', 'mbstring', 'curl');
+    foreach ($requiredExtensions as $ext) {
+        if (!extension_loaded($ext)) {
+            $GLOBALS['log']->error("Required extension '{$ext}' not loaded");
+            $compatible = false;
         }
     }
 
-    // Check database privileges
-    \$testTable = 'outr_twilio_test_priv_' . time();
     try {
-        \$db->query("CREATE TABLE IF NOT EXISTS {\$testTable} (id INT)");
-        \$db->query("DROP TABLE IF EXISTS {\$testTable}");
-    } catch (Exception \$e) {
-        \$GLOBALS['log']->error("Sweet-Dialer: Database user lacks CREATE TABLE privileges");
-        \$compatible = false;
+        $testTable = 'outr_test_' . time();
+        $db->query("CREATE TABLE IF NOT EXISTS {$testTable} (id INT)");
+        $db->query("DROP TABLE IF EXISTS {$testTable}");
+    } catch (Exception $e) {
+        $GLOBALS['log']->error("Database lacks CREATE TABLE privileges");
+        $compatible = false;
     }
 
-    return \$compatible;
+    return $compatible;
 }
 
-/**
- * Run all database migrations from SQL files
- */
-function runMigrations(\$db)
+function runMigrations($db)
 {
-    \$migrationsDir = __DIR__ . '/../install_migrations';
-
-    if (!is_dir(\$migrationsDir)) {
-        \$GLOBALS['log']->error("Sweet-Dialer: Migrations directory not found: {\$migrationsDir}");
+    $migrationsDir = dirname(__DIR__) . '/install_migrations';
+    if (!is_dir($migrationsDir)) {
+        $GLOBALS['log']->error("Migrations directory not found: {$migrationsDir}");
         return;
     }
 
-    // Get all SQL migration files sorted
-    \$migrationFiles = glob(\$migrationsDir . '/*.sql');
-    sort(\$migrationFiles);
+    $migrationFiles = glob($migrationsDir . '/*.sql');
+    sort($migrationFiles);
 
-    foreach (\$migrationFiles as \$file) {
-        \$filename = basename(\$file);
-        \$GLOBALS['log']->debug("Sweet-Dialer: Processing migration: {\$filename}");
+    foreach ($migrationFiles as $file) {
+        $sql = file_get_contents($file);
+        $statements = array_filter(array_map('trim', explode(';', $sql)));
 
-        \$sql = file_get_contents(\$file);
-        if (\$sql === false) {
-            \$GLOBALS['log']->error("Sweet-Dialer: Failed to read migration file: {\$filename}");
-            continue;
-        }
-
-        // Split on semicolons
-        \$statements = array_filter(array_map('trim', explode(';', \$sql)));
-
-        foreach (\$statements as \$statement) {
-            if (empty(\$statement)) {
-                continue;
-            }
-
+        foreach ($statements as $statement) {
+            if (empty($statement)) continue;
             try {
-                // Check if table already exists
-                if (preg_match('/CREATE\\s+TABLE\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?`?(\\w+)`?/i', \$statement, \$matches)) {
-                    \$tableName = \$matches[1];
-                    if (\$db->tableExists(\$tableName)) {
-                        \$GLOBALS['log']->debug("Sweet-Dialer: Table {\$tableName} already exists, skipping");
+                if (preg_match('/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?`?(\w+)`?/i', $statement, $matches)) {
+                    if ($db->tableExists($matches[1])) {
+                        $GLOBALS['log']->debug("Table {$matches[1]} exists, skipping");
                         continue;
                     }
                 }
-
-                \$db->query(\$statement);
-                \$GLOBALS['log']->debug("Sweet-Dialer: Executed migration: {\$filename}");
-            } catch (Exception \$e) {
-                \$GLOBALS['log']->debug("Sweet-Dialer: Migration skipped: " . \$e->getMessage());
+                $db->query($statement);
+            } catch (Exception $e) {
+                $GLOBALS['log']->debug("Migration skipped: " . $e->getMessage());
             }
         }
     }
-
-    \$GLOBALS['log']->info("Sweet-Dialer: Database migrations completed");
 }
 
+function registerModules($db)
+{
+    $modules = array(
+        'outr_TwilioSettings', 'outr_TwilioCalls', 'outr_TwilioVoicemail',
+        'outr_TwilioOptedOut', 'outr_TwilioDualRingtone', 'outr_TwilioHoldRingtone',
+        'outr_TwilioCommonSettings', 'outr_TwilioErrorLogs', 'outr_TwilioLogger',
+        'outr_TwilioPhoneNumbers', 'outr_TwilioVoicemailRecordings'
+    );
+
+    foreach ($modules as $name) {
+        $result = $db->fetchOne("SELECT COUNT(*) as cnt FROM config WHERE category = 'module' AND name = '{$name}'");
+        if (empty($result['cnt'])) {
+            $db->query("INSERT INTO config (category, name, value) VALUES ('module', '{$name}', '1')");
+        }
+    }
+}
+
+function createSchedulers($db)
+{
+    $schedulers = array(
+        array('name' => 'Twilio Call Sync', 'job' => 'function::twilioCallSync', 'interval' => '*/15'),
+        array('name' => 'Twilio Voicemail Cleanup', 'job' => 'function::twilioVoicemailCleanup', 'interval' => '0::22'),
+        array('name' => 'Twilio Log Archiving', 'job' => 'function::twilioLogArchive', 'interval' => '0::1'),
+    );
+
+    foreach ($schedulers as $s) {
+        $existing = $db->fetchOne("SELECT id FROM schedulers WHERE job = '{$s['job']}' AND deleted = 0");
+        if (empty($existing)) {
+            $id = create_guid();
+            $now = gmdate('Y-m-d H:i:s');
+            $db->query("INSERT INTO schedulers (id, name, job, date_time_start, `interval`, status, catch_up, date_entered, date_modified, deleted) 
+                       VALUES ('{$id}', '{$s['name']}', '{$s['job']}', '2024-01-01 00:00:01', '{$s['interval']}', 'Active', 1, '{$now}', '{$now}', 0)");
+        }
+    }
+}
+
+function logInstallVersion($db)
+{
+    $version = '1.0.0';
+    $date = gmdate('Y-m-d H:i:s');
+    $db->query("INSERT INTO config (category, name, value) VALUES ('SweetDialer', 'version', '{$version}') ON DUPLICATE KEY UPDATE value = '{$version}'");
+    $db->query("INSERT INTO config (category, name, value) VALUES ('SweetDialer', 'install_date', '{$date}') ON DUPLICATE KEY UPDATE value = '{$date}'");
+}
+
+function repairAndClearAllCache()
+{
+    foreach (array('cache/modules', 'cache/smarty', 'cache/jsLanguage') as $dir) {
+        if (is_dir($dir)) {
+            foreach (glob($dir . '/*') as $file) {
+                if (is_file($file)) @unlink($file);
+            }
+        }
+    }
+}
