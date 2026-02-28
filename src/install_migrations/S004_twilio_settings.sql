@@ -1,0 +1,25 @@
+-- S-004: outr_twilio_settings table (14 columns + audit fields)
+CREATE TABLE IF NOT EXISTS outr_twilio_settings (
+    id CHAR(36) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    accounts_sid VARCHAR(255) NULL,
+    auth_token TEXT NULL,
+    agent_phone_number VARCHAR(50) NULL,
+    phone_sid VARCHAR(255) NULL,
+    incoming_calls_modules TEXT NULL,
+    status ENUM('Active', 'Inactive') DEFAULT 'Active',
+    bg_color VARCHAR(50) NULL,
+    text_color VARCHAR(50) NULL,
+    api_key_sid VARCHAR(255) NULL,
+    api_key_secret TEXT NULL,
+    twiml_app_sid VARCHAR(255) NULL,
+    date_created DATETIME NOT NULL,
+    date_modified DATETIME NOT NULL,
+    deleted TINYINT(1) DEFAULT 0,
+    created_by CHAR(36) NULL,
+    modified_user_id CHAR(36) NULL,
+    PRIMARY KEY (id),
+    INDEX idx_name (name),
+    INDEX idx_status (status),
+    INDEX idx_deleted (deleted)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
