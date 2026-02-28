@@ -1,7 +1,6 @@
 <?php
 /**
- * S-017, S-018, S-019: Twilio Navigation and Menu Language
- * Twilio Settings Sidebar and Admin Panel
+ * Epic 3: CTI Settings Navigation and Dropdown Lists
  */
 
 $app_list_strings['moduleList']['SweetDialerCTI'] = 'CTI Settings';
@@ -38,22 +37,24 @@ $app_strings['LBL_LOGGER'] = 'Logger';
 $app_strings['LBL_CLEAN_ALL_APP'] = 'Clean All App';
 $app_strings['LBL_STOP_LOGGING'] = 'Stop Logging';
 
-// Dropdown options
-$app_list_strings['twilio_incoming_call_type_list'] = array(
-    'user' => 'User',
-    'ivr' => 'IVR',
+// S-020: Incoming Calls Modules Dropdown
+$app_list_strings['twilio_incoming_calls_modules_list'] = array(
+    'Home' => 'Home',
+    'Contacts' => 'Contacts',
+    'Leads' => 'Leads',
+    'Targets' => 'Targets',
+    'Cases' => 'Cases',
 );
+
+// S-020: CTI Status Dropdown
 $app_list_strings['twilio_cti_status_list'] = array(
     'Active' => 'Active',
     'Inactive' => 'Inactive',
 );
-$app_list_strings['call_direction_list'] = array(
-    'inbound' => 'Inbound',
-    'outbound' => 'Outbound',
-);
-$app_list_strings['call_status_list'] = array(
-    'planned' => 'Planned',
-    'held' => 'Held',
-    'not_held' => 'Not Held',
-    'inbound' => 'Inbound Call',
+
+// S-027: Validation Status Dropdown
+$app_list_strings['twilio_validation_status_list'] = array(
+    '' => '',
+    'Passed' => 'Passed',
+    'Failed' => 'Failed',
 );
