@@ -1,44 +1,33 @@
 <?php
 /**
- * CTI Settings Language File
- * @package SweetDialer
+ * SweetDialerCTI Language File (S-009)
  */
 
-$mod_strings = array_merge($mod_strings ?? [], array(
-    // S-012 Fields
-    'LBL_NAME' => 'Name',
-    'LBL_ACCOUNT_SID' => 'Account SID',
-    'LBL_AUTH_TOKEN' => 'Auth Token',
-    'LBL_API_KEY' => 'API Key',
-    'LBL_API_KEY_SECRET' => 'API Key Secret',
-    'LBL_TWILIO_PHONE_NUMBER' => 'Twilio Phone Number',
-    'LBL_TWILIO_APP_SID' => 'App SID',
-    'LBL_CALLER_NAME' => 'Caller Name',
-    'LBL_INCOMING_CALL_TYPE' => 'Incoming Call Type',
-    'LBL_RECORDING_ENABLED' => 'Recording Enabled',
-    'LBL_AI_ENABLED' => 'AI Enabled',
-    'LBL_STATUS' => 'Status',
-    'LBL_DOMAIN_NAME' => 'Domain Name',
-    'LBL_OUTBOUND_INBOUND_AGENT' => 'Assigned User',
-    'LBL_OUTBOUND_INBOUND_AGENT_ID' => 'Assigned User ID',
-    'LBL_ASSIGNED_TO_NAME' => 'Assigned To',
-    'LBL_DATE_ENTERED' => 'Date Created',
-    'LBL_DATE_MODIFIED' => 'Date Modified',
-    'LBL_MODIFIED' => 'Modified By',
-    'LBL_CREATED' => 'Created By',
-    'LBL_DELETED' => 'Deleted',
-    'LBL_MODULE_NAME' => 'CTI Settings',
-    'LBL_MODULE_TITLE' => 'Twilio CTI Settings',
-    // List View
-    'LBL_LIST_NAME' => 'Name',
-    'LBL_LIST_STATUS' => 'Status',
-    'LBL_LIST_PHONE' => 'Phone',
-    // Dropdown options
-    'LBL_USER_TYPE' => 'User',
-    'LBL_IVR_TYPE' => 'IVR',
-    'LBL_ACTIVE' => 'Active',
-    'LBL_INACTIVE' => 'Inactive',
-    // Edit View
-    'LBL_TWILIO_CREDENTIALS' => 'Twilio Credentials',
-    'LBL_CALL_SETTINGS' => 'Call Settings',
-));
+$mod_strings['LBL_MODULE_NAME'] = 'Twilio CTI Settings';
+$mod_strings['LBL_MODULE_TITLE'] = 'Twilio CTI Settings';
+$mod_strings['LBL_ID'] = 'ID';
+$mod_strings['LBL_NAME'] = 'Name';
+$mod_strings['LBL_ACCOUNTS_SID'] = 'Account SID';
+$mod_strings['LBL_AUTH_TOKEN'] = 'Auth Token';
+$mod_strings['LBL_AGENT_PHONE_NUMBER'] = 'Agent Phone Number';
+$mod_strings['LBL_PHONE_SID'] = 'Phone SID';
+$mod_strings['LBL_INCOMING_CALLS_MODULES'] = 'Incoming Calls Modules';
+$mod_strings['LBL_STATUS'] = 'Status';
+$mod_strings['LBL_BG_COLOR'] = 'Background Color';
+$mod_strings['LBL_TEXT_COLOR'] = 'Text Color';
+$mod_strings['LBL_API_KEY_SID'] = 'API Key SID';
+$mod_strings['LBL_API_KEY_SECRET'] = 'API Key Secret';
+$mod_strings['LBL_TWIML_APP_SID'] = 'TwiML App SID';
+$mod_strings['LBL_DATE_CREATED'] = 'Date Created';
+$mod_strings['LBL_DATE_MODIFIED'] = 'Date Modified';
+$mod_strings['LBL_DELETED'] = 'Deleted';
+$mod_strings['LBL_CREATED'] = 'Created By';
+$mod_strings['LBL_MODIFIED_USER_ID'] = 'Modified By';
+$mod_strings['LBL_NEW_FORM_TITLE'] = 'New CTI Setting';
+$mod_strings['LBL_SEARCH_FORM_TITLE'] = 'Search CTI Settings';
+$mod_strings['LNK_NEW_RECORD'] = 'Create CTI Setting';
+$mod_strings['LNK_LIST'] = 'View CTI Settings';
+$mod_strings['LBL_LIST_FORM_TITLE'] = 'CTI Settings List';
+$mod_strings['LBL_LIST_NAME'] = 'Name';
+$mod_strings['LBL_LIST_STATUS'] = 'Status';
+$mod_strings['LBL_LIST_DATE_CREATED'] = 'Created';

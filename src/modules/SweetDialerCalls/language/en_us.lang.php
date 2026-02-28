@@ -1,39 +1,37 @@
 <?php
 /**
- * CTI Calls Language File
- * @package SweetDialer
+ * SweetDialerCalls Language File (S-010)
  */
 
-$mod_strings = array_merge($mod_strings ?? [], array(
-    // Fields
-    'LBL_ID' => 'ID',
-    'LBL_NAME' => 'Call Subject',
-    'LBL_CALL_SID' => 'Call SID',
-    'LBL_PARENT_TYPE' => 'Related Type',
-    'LBL_PARENT_ID' => 'Related ID',
-    'LBL_PARENT' => 'Related To',
-    'LBL_CTI_SETTING_ID' => 'CTI Setting ID',
-    'LBL_CTI_SETTINGS_NAME' => 'CTI Setting',
-    'LBL_ACCOUNT_ID' => 'Account ID',
-    'LBL_ACCOUNT_NAME' => 'Account',
-    'LBL_DIRECTION' => 'Direction',
-    'LBL_STATUS' => 'Status',
-    'LBL_DURATION' => 'Duration (seconds)',
-    'LBL_DURATION_MINUTES' => 'Duration (minutes)',
-    'LBL_FROM_NUMBER' => 'From',
-    'LBL_TO_NUMBER' => 'To',
-    'LBL_RECORDING_URL' => 'Recording URL',
-    'LBL_NOTES' => 'Notes',
-    'LBL_DATE_ENTERED' => 'Date Created',
-    'LBL_DATE_MODIFIED' => 'Date Modified',
-    'LBL_MODULE_NAME' => 'Twilio Calls',
-    'LBL_MODULE_TITLE' => 'Twilio Calls',
-    // Direction options
-    'LBL_INBOUND' => 'Inbound',
-    'LBL_OUTBOUND' => 'Outbound',
-    // Status options
-    'LBL_PLANNED' => 'Planned',
-    'LBL_HELD' => 'Held',
-    'LBL_NOT_HELD' => 'Not Held',
-    'LBL_INBOUND_CALL' => 'Inbound Call',
-));
+$mod_strings['LBL_MODULE_NAME'] = 'Twilio Calls';
+$mod_strings['LBL_MODULE_TITLE'] = 'Twilio Calls';
+$mod_strings['LBL_ID'] = 'ID';
+$mod_strings['LBL_CALL_TYPE'] = 'Call Type';
+$mod_strings['LBL_AGENT_ID'] = 'Agent';
+$mod_strings['LBL_FROM_NUMBER'] = 'From Number';
+$mod_strings['LBL_TO_NUMBER'] = 'To Number';
+$mod_strings['LBL_STATUS'] = 'Status';
+$mod_strings['LBL_CALL_SID'] = 'Call SID';
+$mod_strings['LBL_DURATION'] = 'Duration (seconds)';
+$mod_strings['LBL_RECORDING_URL'] = 'Recording URL';
+$mod_strings['LBL_RECORDING_SID'] = 'Recording SID';
+$mod_strings['LBL_PARENT_TYPE'] = 'Related Type';
+$mod_strings['LBL_PARENT_ID'] = 'Related To';
+$mod_strings['LBL_COMPANY_ID'] = 'Account';
+$mod_strings['LBL_NOTES'] = 'Notes';
+$mod_strings['LBL_CTI_SETTING_ID'] = 'CTI Setting';
+$mod_strings['LBL_DATE_CREATED'] = 'Call Date';
+$mod_strings['LBL_DATE_MODIFIED'] = 'Date Modified';
+$mod_strings['LBL_DELETED'] = 'Deleted';
+$mod_strings['LBL_NEW_FORM_TITLE'] = 'Log Call';
+$mod_strings['LBL_LIST_FORM_TITLE'] = 'Call Log';
+$mod_strings['LNK_NEW_RECORD'] = 'Log Call';
+$mod_strings['LNK_LIST'] = 'View Calls';
+$mod_strings['LBL_LIST_CALL_SID'] = 'Call SID';
+$mod_strings['LBL_LIST_CALL_TYPE'] = 'Type';
+$mod_strings['LBL_LIST_STATUS'] = 'Status';
+$mod_strings['LBL_LIST_DURATION'] = 'Duration';
+$mod_strings['LBL_INCOMING'] = 'Incoming';
+$mod_strings['LBL_OUTGOING'] = 'Outgoing';
+$mod_strings['LBL_MISSED'] = 'Missed';
+$mod_strings['LBL_REJECTED'] = 'Rejected';
