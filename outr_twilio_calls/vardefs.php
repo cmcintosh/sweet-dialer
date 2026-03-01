@@ -1,0 +1,32 @@
+<?php
+$dictionary["outr_twilio_calls"] = array(
+    "table" => "outr_twilio_calls",
+    "audited" => true,
+    "fields" => array(
+        "id" => array("name" => "id", "vname" => "LBL_ID", "type" => "id", "required" => true),
+        "name" => array("name" => "name", "vname" => "LBL_NAME", "type" => "name", "len" => 255),
+        "call_sid" => array("name" => "call_sid", "vname" => "LBL_CALL_SID", "type" => "varchar", "len" => 100),
+        "from_number" => array("name" => "from_number", "vname" => "LBL_FROM_NUMBER", "type" => "varchar", "len" => 20),
+        "to_number" => array("name" => "to_number", "vname" => "LBL_TO_NUMBER", "type" => "varchar", "len" => 20),
+        "call_type" => array("name" => "call_type", "vname" => "LBL_CALL_TYPE", "type" => "enum", "options" => "twilio_call_type_list", "len" => 20),
+        "agent_id" => array("name" => "agent_id", "vname" => "LBL_AGENT_ID", "type" => "id", "len" => 36),
+        "status" => array("name" => "status", "vname" => "LBL_STATUS", "type" => "varchar", "len" => 50),
+        "duration" => array("name" => "duration", "vname" => "LBL_DURATION", "type" => "int"),
+        "recording_url" => array("name" => "recording_url", "vname" => "LBL_RECORDING_URL", "type" => "varchar", "len" => 500),
+        "recording_sid" => array("name" => "recording_sid", "vname" => "LBL_RECORDING_SID", "type" => "varchar", "len" => 100),
+        "parent_type" => array("name" => "parent_type", "vname" => "LBL_PARENT_TYPE", "type" => "varchar", "len" => 100),
+        "parent_id" => array("name" => "parent_id", "vname" => "LBL_PARENT_ID", "type" => "id", "len" => 36),
+        "company_id" => array("name" => "company_id", "vname" => "LBL_COMPANY_ID", "type" => "id", "len" => 36),
+        "notes" => array("name" => "notes", "vname" => "LBL_NOTES", "type" => "text"),
+        "cti_setting_id" => array("name" => "cti_setting_id", "vname" => "LBL_CTI_SETTING_ID", "type" => "id", "len" => 36),
+        "direction" => array("name" => "direction", "vname" => "LBL_DIRECTION", "type" => "varchar", "len" => 20),
+        "date_entered" => array("name" => "date_entered", "vname" => "LBL_DATE_ENTERED", "type" => "datetime"),
+        "date_modified" => array("name" => "date_modified", "vname" => "LBL_DATE_MODIFIED", "type" => "datetime"),
+        "deleted" => array("name" => "deleted", "vname" => "LBL_DELETED", "type" => "bool", "default" => 0),
+    ),
+    "indices" => array(
+        array("name" => "idx_outr_twilio_calls_id", "type" => "primary", "fields" => array("id")),
+        array("name" => "idx_outr_twilio_calls_sid", "type" => "index", "fields" => array("call_sid")),
+        array("name" => "idx_outr_twilio_calls_parent", "type" => "index", "fields" => array("parent_type", "parent_id")),
+    ),
+);
