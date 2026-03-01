@@ -1,6 +1,7 @@
 <?php
 /**
  * SweetDialer Module Manifest
+ * SuiteCRM Module Loader Compatible
  */
 
 $manifest = array(
@@ -13,7 +14,7 @@ $manifest = array(
     'acceptable_sugar_flavors' => array('CE'),
     'acceptable_sugar_versions' => array(
         'exact_matches' => array(),
-        'regex_matches' => array('6\\.5\\.[0-9]+', '8\\.[0-9]+\\.[0-9]+'),
+        'regex_matches' => array('6\\.5\\.[0-9]+'),
     ),
 );
 
@@ -21,16 +22,12 @@ $installdefs = array(
     'id' => 'SweetDialer',
     'copy' => array(
         array(
-            'from' => '<basedir>/custom',
-            'to' => 'custom',
+            'from' => '<basepath>/custom/',
+            'to' => 'custom/',
         ),
         array(
-            'from' => '<basedir>/modules',
-            'to' => 'modules',
-        ),
-        array(
-            'from' => '<basedir>/config',
-            'to' => 'config',
+            'from' => '<basepath>/modules/',
+            'to' => 'modules/',
         ),
     ),
 );
