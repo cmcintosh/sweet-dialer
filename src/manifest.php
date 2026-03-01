@@ -10,7 +10,7 @@
  * @license GNU AGPLv3
  */
 
-\$manifest = array(
+$manifest = array(
     'name' => 'Sweet-Dialer',
     'description' => 'Twilio AI-Powered Dialer for SuiteCRM 8.x - Click-to-call, call tracking, voicemail, and more. Now with SuiteCRM 8.x compatibility.',
     'version' => '1.0.0',
@@ -35,11 +35,6 @@
             'id_name' => 'suitecrm_version',
             'version' => '7.10.0',
         ),
-    ),
-    'copy_files' => array(
-        'from_dir' => '',
-        'to_dir' => '',
-        'force_copy' => array(),
     ),
     'post_execute' => array(
         0 => '<basepath>/ModuleInstall/install.php',
