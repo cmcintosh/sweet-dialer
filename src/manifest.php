@@ -1,48 +1,60 @@
 <?php
 /**
- * Sweet-Dialer Package Manifest - SuiteCRM 8.x Compatible
- *
- * SuiteCRM Twilio AI-Powered Dialer Module
- * Safe install with error handling and rollback
- *
- * @package SweetDialer
- * @author Wembassy
- * @license GNU AGPLv3
+ * SweetDialer Manifest - SuiteCRM 8.8.0 Compatible
  */
 
 $manifest = array(
-    'name' => 'Sweet-Dialer',
-    'description' => 'Twilio AI-Powered Dialer for SuiteCRM 8.x - Click-to-call, call tracking, voicemail, and more. Now with SuiteCRM 8.x compatibility.',
+    'name' => 'SweetDialer',
     'version' => '1.0.0',
+    'description' => 'Twilio AI-Powered Dialer for SuiteCRM 8.x',
     'author' => 'Wembassy',
+    'readme' => 'README.md',
+    'icon' => 'icon_SweetDialer.png',
     'is_uninstallable' => true,
-    'type' => 'module',
+    'published_date' => '2026-03-01',
     'acceptable_sugar_versions' => array(
         'regex_matches' => array(
-            '8\.\d+\.\d+',  // SuiteCRM 8.x
-            '7\.\d+\.\d+',  // SuiteCRM 7.x (legacy)
+            '8\.8\.\d+',
+            '8\.\d+\.\d+',
+            '7\.\d+\.\d+',
         ),
     ),
     'acceptable_sugar_flavors' => array(
         'CE',
-        'PRO',
         'ENT',
-        'CORP',
         'ULT',
     ),
-    'dependencies' => array(
-        array(
-            'id_name' => 'suitecrm_version',
-            'version' => '7.10.0',
-        ),
+);
+
+$installdefs = array(
+    'id' => 'SweetDialer',
+    'copy' => array(
+        array('from' => '<basedir>/custom', 'to' => 'custom'),
+        array('from' => '<basedir>/modules', 'to' => 'modules'),
+        array('from' => '<basedir>/config', 'to' => 'config'),
     ),
-    'post_execute' => array(
-        0 => '<basepath>/ModuleInstall/install.php',
+    'entrypoints' => array(
+        'voiceWebhook',
+        'statusCallback',
+        'recordingCallback',
+        'transferWarm',
+        'transferCold',
+        'voicemailFetch',
+        'voicemailPlayback',
+        'conferenceJoin',
+        'conferenceControl',
+        'conferenceParticipants',
+        'dialerDashboard',
+        'exportReport',
+        'analyticsData',
+        'voiceRecording',
+        'voiceStatus',
+        'voiceOutbound',
     ),
-    'pre_execute' => array(
-        0 => '<basepath>/ModuleInstall/pre_install.php',
-    ),
-    'post_uninstall' => array(
-        0 => '<basepath>/ModuleInstall/uninstall.php',
+);
+
+$upgrade_manifest = array(
+    'acceptable_sugar_versions' => array(
+        'regex_matches' => array('8\.8\.\d+', '8\.\d+\.\d+', '7\.\d+\.\d+'),
     ),
 );
