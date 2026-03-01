@@ -1,0 +1,23 @@
+<?php
+$mod_strings = array(
+    "LBL_MODULE_NAME" => "Twilio Settings",
+    "LBL_MODULE_TITLE" => "Twilio Settings",
+    "LBL_ID" => "ID",
+    "LBL_NAME" => "Name",
+    "LBL_ACCOUNTS_SID" => "Account SID",
+    "LBL_AUTH_TOKEN" => "Auth Token",
+    "LBL_AGENT_PHONE_NUMBER" => "Agent Phone Number",
+    "LBL_PHONE_SID" => "Phone SID",
+    "LBL_INCOMING_CALLS_MODULES" => "Incoming Calls Modules",
+    "LBL_STATUS" => "Status",
+    "LBL_BG_COLOR" => "Background Color",
+    "LBL_TEXT_COLOR" => "Text Color",
+    "LBL_API_KEY_SID" => "API Key SID",
+    "LBL_API_KEY_SECRET" => "API Key Secret",
+    "LBL_TWIML_APP_SID" => "TwiML App SID",
+    "LBL_LAST_VALIDATION_MESSAGE" => "Last Validation",
+    "LBL_OUTBOUND_INBOUND_AGENT" => "Agent",
+    "LBL_OUTBOUND_INBOUND_AGENT_ID" => "Agent ID",
+    "LBL_TWILIO_VOICE_MAIL" => "Voicemail",
+    "LBL_TWILIO_VOICE_MAIL_ID" => "Voicemail ID",
+);

@@ -1,0 +1,110 @@
+/* Twilio Dialer CSS - SuiteCRM Integration */
+
+.twilio-dialer-overlay {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    width: 350px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+}
+
+.twilio-dialer-header {
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+    background: #28a745;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.twilio-dialer-body {
+    padding: 15px;
+}
+
+.twilio-dialer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 0;
+}
+
+.twilio-dialer-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.twilio-dialer-btn:hover {
+    transform: scale(1.1);
+}
+
+.twilio-dialer-btn.mute { background: #ffc107; }
+.twilio-dialer-btn.mute.muted { background: #6c757d; }
+.twilio-dialer-btn.end { background: #dc3545; color: white; }
+
+.phone-number {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.timer {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    font-family: monospace;
+}
+
+#twilio-call-notes {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.ready { background: #28a745; }
+.status-dot.ringing { background: #ffc107; animation: pulse 1s infinite; }
+.status-dot.active { background: #28a745; animation: pulse 1s infinite; }
+.status-dot.disconnected { background: #dc3545; }
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.twilio-click-to-call {
+    cursor: pointer;
+    color: #28a745;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.twilio-click-to-call:hover {
+    color: #20c997;
+}
+
+.twilio-click-to-call::before {
+    content: "📞 ";
+}
