@@ -1,23 +1,20 @@
 <?php
 /**
- * Sweet-Dialer CTI Settings Module
- *
- * @package SweetDialer
- * @author Wembassy
- * @license GNU AGPLv3
+ * SweetDialerCTI Vardefs (Epic 3: CTI Settings Module)
+ * outr_twilio_settings table
  */
 
-$dictionary['SweetDialerCTI'] = array(
-    'table' => 'twiliodialer_cti_settings',
+$dictionary['outr_TwilioSettings'] = array(
+    'table' => 'outr_twilio_settings',
     'audited' => true,
-    'activity_enabled' => true,
+    'unified_search' => true,
     'fields' => array(
         'id' => array(
             'name' => 'id',
             'vname' => 'LBL_ID',
             'type' => 'id',
             'required' => true,
-            'reportable' => true,
+            'reportable' => false,
         ),
         'name' => array(
             'name' => 'name',
@@ -26,85 +23,76 @@ $dictionary['SweetDialerCTI'] = array(
             'dbType' => 'varchar',
             'len' => 255,
             'required' => true,
+            'importable' => 'required',
         ),
-        'account_sid' => array(
-            'name' => 'account_sid',
-            'vname' => 'LBL_ACCOUNT_SID',
+        // S-020: Core Twilio Fields
+        'accounts_sid' => array(
+            'name' => 'accounts_sid',
+            'vname' => 'LBL_ACCOUNTS_SID',
             'type' => 'varchar',
             'len' => 255,
-            'required' => true,
         ),
         'auth_token' => array(
             'name' => 'auth_token',
             'vname' => 'LBL_AUTH_TOKEN',
-            'type' => 'text',
-            'reportable' => false,
+            'type' => 'varchar',
+            'len' => 255,
         ),
-        'api_key' => array(
-            'name' => 'api_key',
-            'vname' => 'LBL_API_KEY',
-            'type' => 'text',
-            'reportable' => false,
-        ),
-        'api_key_secret' => array(
-            'name' => 'api_key_secret',
-            'vname' => 'LBL_API_KEY_SECRET',
-            'type' => 'text',
-            'reportable' => false,
-        ),
-        'twilio_phone_number' => array(
-            'name' => 'twilio_phone_number',
-            'vname' => 'LBL_TWILIO_PHONE_NUMBER',
-            'type' => 'phone',
+        'agent_phone_number' => array(
+            'name' => 'agent_phone_number',
+            'vname' => 'LBL_AGENT_PHONE_NUMBER',
+            'type' => 'varchar',
             'len' => 50,
         ),
-        'twilio_app_sid' => array(
-            'name' => 'twilio_app_sid',
-            'vname' => 'LBL_TWILIO_APP_SID',
+        'phone_sid' => array(
+            'name' => 'phone_sid',
+            'vname' => 'LBL_PHONE_SID',
             'type' => 'varchar',
             'len' => 255,
         ),
-        'caller_name' => array(
-            'name' => 'caller_name',
-            'vname' => 'LBL_CALLER_NAME',
-            'type' => 'varchar',
-            'len' => 255,
-        ),
-        'incoming_call_type' => array(
-            'name' => 'incoming_call_type',
-            'vname' => 'LBL_INCOMING_CALL_TYPE',
+        'incoming_calls_modules' => array(
+            'name' => 'incoming_calls_modules',
+            'vname' => 'LBL_INCOMING_CALLS_MODULES',
             'type' => 'enum',
-            'options' => 'twilio_incoming_call_type_list',
-            'len' => 100,
-            'default' => 'user',
-        ),
-        'recording_enabled' => array(
-            'name' => 'recording_enabled',
-            'vname' => 'LBL_RECORDING_ENABLED',
-            'type' => 'bool',
-            'default' => '1',
-        ),
-        'ai_enabled' => array(
-            'name' => 'ai_enabled',
-            'vname' => 'LBL_AI_ENABLED',
-            'type' => 'bool',
-            'default' => '0',
+            'options' => 'twilio_incoming_calls_modules_list',
+            'dbType' => 'enum',
+            'len' => 50,
+            'default' => 'Home',
         ),
         'status' => array(
             'name' => 'status',
             'vname' => 'LBL_STATUS',
             'type' => 'enum',
             'options' => 'twilio_cti_status_list',
-            'len' => 100,
+            'dbType' => 'enum',
+            'len' => 30,
             'default' => 'Active',
         ),
-        'domain_name' => array(
-            'name' => 'domain_name',
-            'vname' => 'LBL_DOMAIN_NAME',
-            'type' => 'varchar',
-            'len' => 255,
+        // S-021: Relate Fields
+        'twilio_voice_mail_id' => array(
+            'name' => 'twilio_voice_mail_id',
+            'vname' => 'LBL_TWILIO_VOICE_MAIL_ID',
+            'type' => 'id',
+            'required' => false,
         ),
-        // S-012: CTI Settings -> Users relationship
+        'twilio_voice_mail' => array(
+            'name' => 'twilio_voice_mail',
+            'vname' => 'LBL_TWILIO_VOICE_MAIL',
+            'type' => 'relate',
+            'rname' => 'name',
+            'id_name' => 'twilio_voice_mail_id',
+            'module' => 'SweetDialerVoicemail',
+            'source' => 'non-db',
+            'dbType' => 'varchar',
+            'massupdate' => false,
+            'quick_search' => array('enabled' => true),
+        ),
+        'outbound_inbound_agent_id' => array(
+            'name' => 'outbound_inbound_agent_id',
+            'vname' => 'LBL_OUTBOUND_INBOUND_AGENT_ID',
+            'type' => 'id',
+            'required' => false,
+        ),
         'outbound_inbound_agent' => array(
             'name' => 'outbound_inbound_agent',
             'vname' => 'LBL_OUTBOUND_INBOUND_AGENT',
@@ -113,87 +101,141 @@ $dictionary['SweetDialerCTI'] = array(
             'id_name' => 'outbound_inbound_agent_id',
             'module' => 'Users',
             'source' => 'non-db',
+            'dbType' => 'varchar',
             'massupdate' => false,
+            'quick_search' => array('enabled' => true),
         ),
-        'outbound_inbound_agent_id' => array(
-            'name' => 'outbound_inbound_agent_id',
-            'vname' => 'LBL_OUTBOUND_INBOUND_AGENT_ID',
-            'type' => 'id',
-            'reportable' => false,
+        // S-022: Color Picker Fields
+        'bg_color' => array(
+            'name' => 'bg_color',
+            'vname' => 'LBL_BG_COLOR',
+            'type' => 'varchar',
+            'len' => 7,
+            'default' => '#ffffff',
         ),
-        // S-013: CTI Settings -> Voicemail relationship
-        'twilio_voice_mail_id' => array(
-            'name' => 'twilio_voice_mail_id',
-            'vname' => 'LBL_TWILIO_VOICE_MAIL_ID',
-            'type' => 'id',
+        'text_color' => array(
+            'name' => 'text_color',
+            'vname' => 'LBL_TEXT_COLOR',
+            'type' => 'varchar',
+            'len' => 7,
+            'default' => '#000000',
         ),
-        // Standard fields
-        'assigned_user_id' => array(
-            'name' => 'assigned_user_id',
-            'rname' => 'user_name',
-            'id_name' => 'assigned_user_id',
-            'vname' => 'LBL_ASSIGNED_TO_NAME',
-            'type' => 'assigned_user_name',
-            'table' => 'users',
-            'module' => 'Users',
+        // S-023: File Upload Fields
+        'dual_ring_file' => array(
+            'name' => 'dual_ring_file',
+            'vname' => 'LBL_DUAL_RING_FILE',
+            'type' => 'varchar',
+            'len' => 255,
         ),
-        'assigned_user_name' => array(
-            'name' => 'assigned_user_name',
-            'vname' => 'LBL_ASSIGNED_TO_NAME',
-            'type' => 'relate',
-            'source' => 'non-db',
-            'rname' => 'user_name',
-            'id_name' => 'assigned_user_id',
-            'module' => 'Users',
+        'dual_ring_file_name' => array(
+            'name' => 'dual_ring_file_name',
+            'vname' => 'LBL_DUAL_RING_FILE_NAME',
+            'type' => 'varchar',
+            'len' => 255,
         ),
-        'date_entered' => array(
-            'name' => 'date_entered',
-            'vname' => 'LBL_DATE_ENTERED',
+        'hold_ring_file' => array(
+            'name' => 'hold_ring_file',
+            'vname' => 'LBL_HOLD_RING_FILE',
+            'type' => 'varchar',
+            'len' => 255,
+        ),
+        'hold_ring_file_name' => array(
+            'name' => 'hold_ring_file_name',
+            'vname' => 'LBL_HOLD_RING_FILE_NAME',
+            'type' => 'varchar',
+            'len' => 255,
+        ),
+        // S-024: v2 API Credential Fields
+        'api_key_sid' => array(
+            'name' => 'api_key_sid',
+            'vname' => 'LBL_API_KEY_SID',
+            'type' => 'varchar',
+            'len' => 255,
+        ),
+        'api_key_secret' => array(
+            'name' => 'api_key_secret',
+            'vname' => 'LBL_API_KEY_SECRET',
+            'type' => 'varchar',
+            'len' => 255,
+        ),
+        'twiml_app_sid' => array(
+            'name' => 'twiml_app_sid',
+            'vname' => 'LBL_TWIML_APP_SID',
+            'type' => 'varchar',
+            'len' => 255,
+        ),
+        // S-027: Last Validation Message
+        'last_validation_status' => array(
+            'name' => 'last_validation_status',
+            'vname' => 'LBL_LAST_VALIDATION_STATUS',
+            'type' => 'enum',
+            'options' => 'twilio_validation_status_list',
+            'dbType' => 'enum',
+            'len' => 30,
+            'default' => '',
+        ),
+        'last_validation_message' => array(
+            'name' => 'last_validation_message',
+            'vname' => 'LBL_LAST_VALIDATION_MESSAGE',
+            'type' => 'text',
+        ),
+        'last_validation_date' => array(
+            'name' => 'last_validation_date',
+            'vname' => 'LBL_LAST_VALIDATION_DATE',
             'type' => 'datetime',
-            'required' => true,
+        ),
+        // S-031: Ring Timeout
+        'ring_timeout' => array(
+            'name' => 'ring_timeout',
+            'vname' => 'LBL_RING_TIMEOUT',
+            'type' => 'int',
+            'default' => 30,
+            'len' => 3,
+        ),
+        // Audit Fields
+        'date_created' => array(
+            'name' => 'date_created',
+            'vname' => 'LBL_DATE_CREATED',
+            'type' => 'datetime',
         ),
         'date_modified' => array(
             'name' => 'date_modified',
             'vname' => 'LBL_DATE_MODIFIED',
             'type' => 'datetime',
-            'required' => true,
-        ),
-        'created_by' => array(
-            'name' => 'created_by',
-            'type' => 'id',
-        ),
-        'modified_user_id' => array(
-            'name' => 'modified_user_id',
-            'type' => 'id',
         ),
         'deleted' => array(
             'name' => 'deleted',
+            'vname' => 'LBL_DELETED',
             'type' => 'bool',
-            'default' => '0',
+            'default' => 0,
+        ),
+        'created_by' => array(
+            'name' => 'created_by',
+            'rname' => 'user_name',
+            'id_name' => 'created_by',
+            'vname' => 'LBL_CREATED',
+            'type' => 'assigned_user_name',
+            'table' => 'users',
+            'isnull' => false,
+            'dbType' => 'id',
+        ),
+        'modified_user_id' => array(
+            'name' => 'modified_user_id',
+            'vname' => 'LBL_MODIFIED_USER_ID',
+            'type' => 'relate',
+            'dbType' => 'id',
+            'rname' => 'user_name',
+            'id_name' => 'modified_user_id',
+            'table' => 'users',
         ),
     ),
     'indices' => array(
-        'id' => array(
-            'name' => 'idx_sweetdialercti_pk',
-            'type' => 'primary',
-            'fields' => array('id'),
-        ),
-        'status' => array(
-            'name' => 'idx_sweetdialercti_status',
-            'type' => 'index',
-            'fields' => array('status'),
-        ),
-        'assigned_user' => array(
-            'name' => 'idx_sweetdialercti_assigned',
-            'type' => 'index',
-            'fields' => array('assigned_user_id'),
-        ),
+        array('name' => 'idx_twilio_settings_name', 'type' => 'index', 'fields' => array('name')),
+        array('name' => 'idx_twilio_settings_status', 'type' => 'index', 'fields' => array('status')),
+        array('name' => 'idx_twilio_settings_deleted', 'type' => 'index', 'fields' => array('deleted')),
+        // S-028: Multi-agent/multi-number uniqueness
+        array('name' => 'idx_phone_agent_unique', 'type' => 'unique', 'fields' => array('agent_phone_number', 'outbound_inbound_agent_id', 'deleted')),
     ),
     'optimistic_locking' => true,
-    'relationships' => array(),
+    'unified_search' => true,
 );
-
-if (!class_exists('VardefManager')) {
-    require_once('include/SugarObjects/VardefManager.php');
-}
-VardefManager::createVardef('SweetDialerCTI', 'SweetDialerCTI', array('basic', 'assignable'));
