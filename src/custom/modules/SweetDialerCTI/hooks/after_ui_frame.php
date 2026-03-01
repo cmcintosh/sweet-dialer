@@ -1,150 +1,236 @@
 <?php
 /**
- * SweetDialer CTI - After UI Frame Hook
- * Injects click-to-call UI and dialer widget into SuiteCRM pages
+ * S-127-S-129: Dashboard Widget Injection Hook
  *
  * @package SweetDialer
- * @subpackage CTI
- * @author Wembassy Development Team
- * @license AGPL-3.0
+ * @subpackage Reporting
  */
 
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-class SweetDialerUIHook
+/**
+ * Inject dashboard widget assets into the page
+ *
+ * @param SugarBean $bean
+ * @param array $args
+ * @param string $event
+ */
+function injectDashboardWidget($bean, $event, $args)
 {
-    /**
-     * Main hook entry point - called after UI frame is rendered
-     * @param object \$event
-     * @param array \$arguments
-     */
-    public function after_ui_frame(\$event, \$arguments)
-    {
-        // Only inject for authenticated users with CTI access
-        if (!\$this->hasCTIAccess()) {
-            return;
+    global $current_user;
+    
+    // Only inject on dashboard or home page
+    $module = $_GET['module'] ?? '';
+    $action = $_GET['action'] ?? '';
+    
+    $isDashboard = (
+        $module === 'Home' ||
+        $module === 'Dashboard' ||
+        ($module === 'OutrReports' && $action === 'Dashboard') ||
+        $action === 'index'
+    );
+    
+    if (!$isDashboard) {
+        return;
+    }
+    
+    // Check if user has permission to view dashboard
+    if (!ACLController::checkAccess('OutrReports', 'view', $current_user->id)) {
+        return;
+    }
+    
+    // Get configuration
+    $config = getDialerDashboardConfig();
+    
+    // Inject CSS
+    $cssUrl = 'custom/include/TwilioDialer/css/dashboardWidget.css';
+    if (file_exists($cssUrl)) {
+        echo '<link rel="stylesheet" type="text/css" href="' . $cssUrl . '"/>\n';
+    }
+    
+    // Inject inline styles for widget
+    echo '<style>
+        .outr-dashboard-panel {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        // Get current user info
-        global \$current_user;
-        \$userId = \$current_user->id;
-        \$userName = \$current_user->user_name;
-
-        // Output the injection script
-        echo \$this->getInjectionScript(\$userId, \$userName);
-    }
-
-    /**
-     * Check if current user has CTI access
-     * @return bool
-     */
-    private function hasCTIAccess()
-    {
-        global \$current_user;
-
-        if (empty(\$current_user) || empty(\$current_user->id)) {
-            return false;
+        .outr-dashboard-header {
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        // Check if user has 'sweetdialer_cti_enabled' preference
-        \$ctiEnabled = \$current_user->getPreference('sweetdialer_cti_enabled', 'global');
-
-        // Default to enabled if preference not set (agents get it by default)
-        if (\$ctiEnabled === null) {
-            // Check if user has a configured OutrCtiUserAgent
-            \$bean = BeanFactory::getBean('OutrCtiUserAgents');
-            \$agents = \$bean->get_full_list(
-                "date_end DESC",
-                "outr_cti_user_agents.assigned_user_id = '{\$current_user->id}' AND (outr_cti_user_agents.date_end IS NULL OR outr_cti_user_agents.date_end > NOW())"
-            );
-            return !empty(\$agents);
+        .outr-dashboard-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
         }
-
-        return \$ctiEnabled === '1' || \$ctiEnabled === true;
-    }
-
-    /**
-     * Get the JavaScript injection HTML
-     * @param string \$userId
-     * @param string \$userName
-     * @return string
-     */
-    private function getInjectionScript(\$userId, \$userName)
-    {
-        \$jsUrl = 'custom/include/TwilioDialer/js/twilioClient.js';
-        \$overlayUrl = 'custom/include/TwilioDialer/js/dialerOverlay.js';
-
-        return "<script type=\"text/javascript\">
-(function() {
-    window.SweetDialerCTI = window.SweetDialerCTI || {};
-    window.SweetDialerCTI.userId = '\$userId';
-    window.SweetDialerCTI.userName = '\$userName';
-    window.SweetDialerCTI.baseUrl = 'index.php?entryPoint=';
-
-    var styles = document.createElement('style');
-    styles.id = 'sweetdialer-cti-styles';
-    styles.textContent = '.sweetdialer-phone-icon{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:8px;cursor:pointer;color:#00d4aa;font-size:14px;transition:transform 0.2s}.sweetdialer-phone-icon:hover{transform:scale(1.2)}.sweetdialer-header-widget{display:flex;align-items:center;gap:8px;padding:4px 12px;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.2);border-radius:20px;margin-right:16px}.sweetdialer-header-widget input{width:150px;padding:4px 10px;border:1px solid #ddd;border-radius:12px;font-size:13px}.sweetdialer-header-widget button{padding:4px 12px;background:#00d4aa;color:#0b1a2e;border:none;border-radius:12px;cursor:pointer;font-size:12px;font-weight:600}';
-    document.head.appendChild(styles);
-
-    function addClickToCallIcons() {
-        var phoneFields = document.querySelectorAll('td[field=\"phone_work\"],td[field=\"phone_mobile\"],td[field=\"phone_home\"],td[field=\"phone_other\"],.phone');
-        phoneFields.forEach(function(field) {
-            var phoneText = field.textContent.trim();
-            var cleanPhone = phoneText.replace(/\\D/g, '');
-            if (cleanPhone.length >= 10 && !field.querySelector('.sweetdialer-phone-icon')) {
-                var icon = document.createElement('span');
-                icon.className = 'sweetdialer-phone-icon';
-                icon.innerHTML = '&#9742;';
-                icon.title = 'Click to call ' + phoneText;
-                icon.onclick = function(e) {
-                    e.preventDefault();
-                    initiateCall(cleanPhone);
-                };
-                field.appendChild(icon);
-            }
-        });
-    }
-
-    function addHeaderDialer() {
-        var headerRight = document.querySelector('#globalLinks') || document.querySelector('.navbar-right');
-        if (headerRight && !document.getElementById('sweetdialer-header-widget')) {
-            var widget = document.createElement('div');
-            widget.id = 'sweetdialer-header-widget';
-            widget.className = 'sweetdialer-header-widget';
-            widget.innerHTML = '<input type=\"text\" id=\"sweetdialer-dial-input\" placeholder=\"Enter phone...\" maxlength=\"15\"><button id=\"sweetdialer-dial-btn\">&#9742;</button>';
-            headerRight.parentNode.insertBefore(widget, headerRight);
-            
-            document.getElementById('sweetdialer-dial-btn').onclick = function() {
-                var phone = document.getElementById('sweetdialer-dial-input').value.replace(/\\D/g, '');
-                if (phone.length >= 10) initiateCall(phone);
-            };
+        .outr-dashboard-header h3 i {
+            color: #5cb85c;
+            margin-right: 10px;
         }
-    }
-
-    function initiateCall(phoneNumber) {
-        if (window.TwilioClient && window.TwilioClient.getInstance) {
-            var client = window.TwilioClient.getInstance();
-            if (client) client.makeCall(phoneNumber);
-            else alert('Phone system not ready. Please refresh.');
-        } else {
-            console.error('SweetDialer: Twilio client not loaded');
+        .outr-dashboard-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+        .outr-last-updated {
+            font-size: 12px;
+            color: #666;
+        }
+        .outr-refresh-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .outr-refresh-btn:hover {
+            background: #e6e6e6;
+        }
+        .outr-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px;
+        }
+        .outr-metric-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        .outr-metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        .outr-metric-total .outr-metric-icon { background: #e3f2fd; color: #1976d2; }
+        .outr-metric-inbound .outr-metric-icon { background: #e8f5e9; color: #388e3c; }
+        .outr-metric-outbound .outr-metric-icon { background: #fff3e0; color: #f57c00; }
+        .outr-metric-missed .outr-metric-icon { background: #ffebee; color: #d32f2f; }
+        .outr-metric-avg-duration .outr-metric-icon { background: #f3e5f5; color: #7b1fa2; }
+        .outr-metric-success-rate .outr-metric-icon { background: #e0f2f1; color: #00796b; }
+        .outr-metric-data {
+            display: flex;
+            flex-direction: column;
+        }
+        .outr-metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .outr-metric-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .outr-recent-calls {
+            padding: 0 20px 20px;
+            border-top: 1px solid #eee;
+        }
+        .outr-recent-calls h4 {
+            margin: 15px 0;
+            color: #333;
+        }
+        .outr-calls-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .outr-call-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .outr-call-item:last-child {
+            border-bottom: none;
+        }
+        .outr-call-direction {
+            width: 30px;
+            text-align: center;
+            color: #666;
+        }
+        .outr-call-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .outr-call-number {
+            font-weight: 500;
+        }
+        .outr-call-contact {
+            font-size: 12px;
+            color: #666;
+        }
+        .outr-call-meta {
+            text-align: right;
+        }
+        .outr-call-status {
+            display: block;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-bottom: 3px;
+        }
+        .outr-status-completed .outr-call-status { background: #e8f5e9; color: #388e3c; }
+        .outr-status-missed .outr-call-status { background: #ffebee; color: #d32f2f; }
+        .outr-status-voicemail .outr-call-status { background: #fff3e0; color: #f57c00; }
+        .outr-status-other .outr-call-status { background: #f5f5f5; color: #666; }
+        .outr-call-time {
+            font-size: 11px;
+            color: #999;
+        }
+        .outr-no-calls {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+    </style>\n';
+    
+    // Inject configuration script
+    echo '<script>\n';
+    echo 'window.outrDashboardConfig = ' . json_encode($config) . ';\n';
+    echo '</script>\n';
+    
+    // Inject JavaScript
+    $jsUrl = 'custom/include/TwilioDialer/js/dashboardWidget.js';
+    if (file_exists($jsUrl)) {
+        echo '<script src="' . $jsUrl . '" type="text/javascript"></script>\n';
     }
+}
 
-    function init() {
-        addClickToCallIcons();
-        addHeaderDialer();
-        setInterval(addClickToCallIcons, 2000);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-})();
-</script>";
-    }
+/**
+ * Get dashboard configuration
+ *
+ * @return array
+ */
+function getDialerDashboardConfig()
+{
+    global $sugar_config;
+    
+    return array(
+        'refreshInterval' => isset($sugar_config['outr_dashboard_refresh']) 
+            ? intval($sugar_config['outr_dashboard_refresh']) 
+            : 60,
+        'enabled' => isset($sugar_config['outr_reporting_enabled']) 
+            ? (bool)$sugar_config['outr_reporting_enabled'] 
+            : true,
+        'defaultRange' => isset($sugar_config['outr_analytics_default_range']) 
+            ? $sugar_config['outr_analytics_default_range'] 
+            : 'last_30_days',
+    );
 }
