@@ -4,9 +4,9 @@
  * S-110-S-112: Conference Room List
  */
 
-\$module_name = 'OutrConference';
+$module_name = 'OutrConference';
 
-\$listViewDefs[$module_name] = array(
+$listViewDefs[$module_name] = array(
     'NAME' => array(
         'width' => '25%',
         'label' => 'LBL_NAME',

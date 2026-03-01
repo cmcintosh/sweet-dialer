@@ -16,7 +16,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 // Auto-created flag field
-\$dictionary['Contact']['fields']['auto_created'] = array(
+$dictionary['Contact']['fields']['auto_created'] = array(
     'name' => 'auto_created',
     'vname' => 'LBL_AUTO_CREATED',
     'type' => 'bool',
@@ -30,7 +30,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 );
 
 // Auto-created date field
-\$dictionary['Contact']['fields']['auto_created_date'] = array(
+$dictionary['Contact']['fields']['auto_created_date'] = array(
     'name' => 'auto_created_date',
     'vname' => 'LBL_AUTO_CREATED_DATE',
     'type' => 'datetime',

@@ -25,13 +25,13 @@ class SweetDialerPermissionManager
      */
     public static function isAdmin()
     {
-        global \$current_user;
+        global $current_user;
         
-        if (empty(\$current_user)) {
+        if (empty($current_user)) {
             return false;
         }
         
-        return \$current_user->is_admin == 1 || \$current_user->isAdmin();
+        return $current_user->is_admin == 1 || $current_user->isAdmin();
     }
     
     /**
@@ -40,13 +40,13 @@ class SweetDialerPermissionManager
      */
     public static function isManager()
     {
-        global \$current_user;
+        global $current_user;
         
         if (self::isAdmin()) {
             return true;
         }
         
-        return self::hasRole(\$current_user->id, 'Manager');
+        return self::hasRole($current_user->id, 'Manager');
     }
     
     /**
@@ -55,13 +55,13 @@ class SweetDialerPermissionManager
      */
     public static function isAgent()
     {
-        global \$current_user;
+        global $current_user;
         
-        if (empty(\$current_user)) {
+        if (empty($current_user)) {
             return false;
         }
         
-        return self::hasRole(\$current_user->id, 'Agent') || self::hasRole(\$current_user->id, 'Sales');
+        return self::hasRole($current_user->id, 'Agent') || self::hasRole($current_user->id, 'Sales');
     }
     
     /**
@@ -70,17 +70,17 @@ class SweetDialerPermissionManager
      * @param string $roleName
      * @return bool
      */
-    public static function hasRole(\$userId, \$roleName)
+    public static function hasRole($userId, $roleName)
     {
-        if (empty(\$userId) || empty(\$roleName)) {
+        if (empty($userId) || empty($roleName)) {
             return false;
         }
         
-        \$role = new ACLRole();
-        \$roles = \$role->getUserRoles(\$userId);
+        $role = new ACLRole();
+        $roles = $role->getUserRoles($userId);
         
-        foreach (\$roles as \$r) {
-            if (stripos(\$r['name'], \$roleName) !== false) {
+        foreach ($roles as $r) {
+            if (stripos($r['name'], $roleName) !== false) {
                 return true;
             }
         }
@@ -97,29 +97,29 @@ class SweetDialerPermissionManager
      * @param string $ctiSettingId CTI setting ID (for specific record checks)
      * @return bool
      */
-    public static function canAccessCTISetting(\$action = 'view', \$ctiSettingId = null)
+    public static function canAccessCTISetting($action = 'view', $ctiSettingId = null)
     {
-        global \$current_user;
+        global $current_user;
         
         if (self::isAdmin()) {
             return true;
         }
         
         // For create, require admin
-        if (\$action === 'create') {
+        if ($action === 'create') {
             return false;
         }
         
         // Agents can only view their own assigned CTI config
-        if (\$action === 'view' && !empty(\$ctiSettingId)) {
-            \$bean = BeanFactory::getBean('outr_TwilioSettings', \$ctiSettingId);
-            if (\$bean && !empty(\$bean->outbound_inbound_agent_id)) {
-                return \$bean->outbound_inbound_agent_id === \$current_user->id;
+        if ($action === 'view' && !empty($ctiSettingId)) {
+            $bean = BeanFactory::getBean('outr_TwilioSettings', $ctiSettingId);
+            if ($bean && !empty($bean->outbound_inbound_agent_id)) {
+                return $bean->outbound_inbound_agent_id === $current_user->id;
             }
         }
         
         // Agents can view but not edit
-        if (\$action === 'view') {
+        if ($action === 'view') {
             return true;
         }
         
@@ -132,11 +132,11 @@ class SweetDialerPermissionManager
      * @param string $ctiSettingId
      * @return bool
      */
-    public static function canUseDialer(\$ctiSettingId = null)
+    public static function canUseDialer($ctiSettingId = null)
     {
-        global \$current_user;
+        global $current_user;
         
-        if (empty(\$current_user)) {
+        if (empty($current_user)) {
             return false;
         }
         
@@ -146,9 +146,9 @@ class SweetDialerPermissionManager
         }
         
         // Check if CTI config is assigned to this user
-        if (!empty(\$ctiSettingId)) {
-            \$bean = BeanFactory::getBean('outr_TwilioSettings', \$ctiSettingId);
-            if (\$bean && \$bean->outbound_inbound_agent_id === \$current_user->id) {
+        if (!empty($ctiSettingId)) {
+            $bean = BeanFactory::getBean('outr_TwilioSettings', $ctiSettingId);
+            if ($bean && $bean->outbound_inbound_agent_id === $current_user->id) {
                 return true;
             }
         }
@@ -164,11 +164,11 @@ class SweetDialerPermissionManager
      * @param string $alias Table alias for SQL query
      * @return array Array containing 'where' clause and 'params'
      */
-    public static function getCallsVisibilityFilter(\$alias = '')
+    public static function getCallsVisibilityFilter($alias = '')
     {
-        global \$current_user;
+        global $current_user;
         
-        \$prefix = !empty(\$alias) ? \$alias . '.' : '';
+        $prefix = !empty($alias) ? $alias . '.' : '';
         
         // Admin and Manager see all
         if (self::isAdmin() || self::isManager()) {
@@ -179,11 +179,11 @@ class SweetDialerPermissionManager
         }
         
         // Agent sees own calls only
-        \$userId = \$current_user->id ?? '';
+        $userId = $current_user->id ?? '';
         
         return array(
-            'where' => " AND (\${prefix}agent_id = ? OR \${prefix}assigned_user_id = ?)",
-            'params' => array(\$userId, \$userId)
+            'where' => " AND (${prefix}agent_id = ? OR ${prefix}assigned_user_id = ?)",
+            'params' => array($userId, $userId)
         );
     }
     
@@ -193,11 +193,11 @@ class SweetDialerPermissionManager
      * @param SugarBean $bean
      * @return bool True if access allowed, false otherwise
      */
-    public static function checkCallAccess(\$bean)
+    public static function checkCallAccess($bean)
     {
-        global \$current_user;
+        global $current_user;
         
-        if (empty(\$bean) || empty(\$current_user)) {
+        if (empty($bean) || empty($current_user)) {
             return false;
         }
         
@@ -207,9 +207,9 @@ class SweetDialerPermissionManager
         }
         
         // Agent can only access their own calls
-        \$userId = \$current_user->id;
+        $userId = $current_user->id;
         
-        if (\$bean->agent_id === \$userId || \$bean->assigned_user_id === \$userId) {
+        if ($bean->agent_id === $userId || $bean->assigned_user_id === $userId) {
             return true;
         }
         
@@ -222,24 +222,24 @@ class SweetDialerPermissionManager
      */
     public static function getAccessibleCTISettingIds()
     {
-        global \$current_user, \$db;
+        global $current_user, $db;
         
-        \$ids = array();
+        $ids = array();
         
-        \$sql = "SELECT id FROM outr_twilio_settings WHERE deleted = 0";
+        $sql = "SELECT id FROM outr_twilio_settings WHERE deleted = 0";
         
         // Agents only see their assigned config
-        if (!self::isAdmin() && !empty(\$current_user->id)) {
-            \$sql .= " AND outbound_inbound_agent_id = '". \$db->quote(\$current_user->id) . "'";
+        if (!self::isAdmin() && !empty($current_user->id)) {
+            $sql .= " AND outbound_inbound_agent_id = '". $db->quote($current_user->id) . "'";
         }
         
-        \$result = \$db->query(\$sql);
+        $result = $db->query($sql);
         
-        while (\$row = \$db->fetchByAssoc(\$result)) {
-            \$ids[] = \$row['id'];
+        while ($row = $db->fetchByAssoc($result)) {
+            $ids[] = $row['id'];
         }
         
-        return \$ids;
+        return $ids;
     }
     
     /**
@@ -250,21 +250,21 @@ class SweetDialerPermissionManager
      * @param string $action
      * @param bool $granted
      */
-    public static function auditAccess(\$module, \$recordId, \$action, \$granted)
+    public static function auditAccess($module, $recordId, $action, $granted)
     {
-        global \$current_user;
+        global $current_user;
         
-        \$logData = array(
+        $logData = array(
             'timestamp' => date('Y-m-d H:i:s'),
-            'user_id' => \$current_user->id ?? 'unknown',
-            'user_name' => \$current_user->user_name ?? 'unknown',
-            'module' => \$module,
-            'record_id' => \$recordId,
-            'action' => \$action,
-            'granted' => \$granted,
-            'ip_address' => \$_SERVER['REMOTE_ADDR'] ?? 'unknown'
+            'user_id' => $current_user->id ?? 'unknown',
+            'user_name' => $current_user->user_name ?? 'unknown',
+            'module' => $module,
+            'record_id' => $recordId,
+            'action' => $action,
+            'granted' => $granted,
+            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown'
         );
         
-        \$GLOBALS['log']->security("Sweet-Dialer RBAC: " . json_encode(\$logData));
+        $GLOBALS['log']->security("Sweet-Dialer RBAC: " . json_encode($logData));
     }
 }

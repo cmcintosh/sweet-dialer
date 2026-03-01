@@ -15,7 +15,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 // Add auto_created field to detail view panels
-\$viewdefs['Contacts']['DetailView']['panels']['LBL_PANEL_ADVANCED']['newRow1'] = array(
+$viewdefs['Contacts']['DetailView']['panels']['LBL_PANEL_ADVANCED']['newRow1'] = array(
     0 => array(
         'name' => 'auto_created',
         'label' => 'LBL_AUTO_CREATED',
@@ -27,7 +27,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 );
 
 // Alternative approach - add to standard panel
-\$viewdefs['Contacts']['DetailView']['panels']['lbl_contact_information']['newRow2'] = array(
+$viewdefs['Contacts']['DetailView']['panels']['lbl_contact_information']['newRow2'] = array(
     0 => array(
         'name' => 'auto_created',
         'label' => 'LBL_AUTO_CREATED',

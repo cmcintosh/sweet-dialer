@@ -4,7 +4,7 @@
  * S-107-S-109: Add Conference to sidebar
  */
 
-\$navigation['OutrConference'] = array(
+$navigation['OutrConference'] = array(
     'type' => 'module',
     'order' => 120,
     'module' => 'OutrConference',

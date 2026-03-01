@@ -4,9 +4,9 @@
  * S-110-S-112: Conference Room Management
  */
 
-\$module_name = 'OutrConference';
+$module_name = 'OutrConference';
 
-\$viewdefs[$module_name]['EditView'] = array(
+$viewdefs[$module_name]['EditView'] = array(
     'templateMeta' => array(
         'form' => array(
             'buttons' => array(

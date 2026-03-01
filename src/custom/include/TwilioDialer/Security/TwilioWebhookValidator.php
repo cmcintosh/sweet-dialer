@@ -37,8 +37,8 @@ class TwilioWebhookValidator
     
     public static function getWebhookUrl($path = '')
     {
-        $protocol = (!empty(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-        $host = \$_SERVER['HTTP_HOST'] ?? 'localhost';
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
         return $protocol . $host . $path;
     }
     
@@ -47,14 +47,14 @@ class TwilioWebhookValidator
         $logData = array(
             'timestamp' => date('Y-m-d H:i:s'),
             'reason' => $reason,
-            'ip_address' => \$_SERVER['REMOTE_ADDR'] ?? 'unknown',
-            'user_agent' => \$_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
-            'request_uri' => \$_SERVER['REQUEST_URI'] ?? 'unknown',
-            'method' => \$_SERVER['REQUEST_METHOD'] ?? 'unknown',
+            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+            'request_uri' => $_SERVER['REQUEST_URI'] ?? 'unknown',
+            'method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown',
         );
         
         $logData = array_merge($logData, $context);
-        \$GLOBALS['log']->security("Sweet-Dialer Webhook Rejected: " . json_encode($logData));
+        $GLOBALS['log']->security("Sweet-Dialer Webhook Rejected: " . json_encode($logData));
         
         $logFile = 'custom/SweetDialer/logs/webhook-security.log';
         $logDir = dirname($logFile);
@@ -83,7 +83,7 @@ class TwilioWebhookValidator
     
     public static function requireValidSignature($authToken, $endpointPath)
     {
-        $signature = \$_SERVER['HTTP_X_TWILIO_SIGNATURE'] ?? '';
+        $signature = $_SERVER['HTTP_X_TWILIO_SIGNATURE'] ?? '';
         
         if (empty($signature)) {
             self::logRejectedRequest('Missing X-Twilio-Signature header', array(
@@ -93,7 +93,7 @@ class TwilioWebhookValidator
         }
         
         $url = self::getWebhookUrl($endpointPath);
-        $postData = \$_POST ?? array();
+        $postData = $_POST ?? array();
         
         if (!self::validateRequest($authToken, $url, $postData, $signature)) {
             self::logRejectedRequest('Invalid signature', array(

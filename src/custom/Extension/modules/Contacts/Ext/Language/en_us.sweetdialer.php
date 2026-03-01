@@ -7,5 +7,5 @@
  * @license GNU AGPLv3
  */
 
-\$mod_strings['LBL_AUTO_CREATED'] = 'Auto-Created';
-\$mod_strings['LBL_AUTO_CREATED_DATE'] = 'Auto-Created Date';
+$mod_strings['LBL_AUTO_CREATED'] = 'Auto-Created';
+$mod_strings['LBL_AUTO_CREATED_DATE'] = 'Auto-Created Date';
