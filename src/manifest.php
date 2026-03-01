@@ -1,25 +1,26 @@
 <?php
 /**
- * Sweet-Dialer Package Manifest
+ * Sweet-Dialer Package Manifest - SuiteCRM 8.x Compatible
  *
  * SuiteCRM Twilio AI-Powered Dialer Module
+ * Safe install with error handling and rollback
  *
  * @package SweetDialer
  * @author Wembassy
  * @license GNU AGPLv3
  */
 
-$manifest = array(
+\$manifest = array(
     'name' => 'Sweet-Dialer',
-    'description' => 'Twilio AI-Powered Dialer for SuiteCRM - Click-to-call, call tracking, voicemail, and more',
+    'description' => 'Twilio AI-Powered Dialer for SuiteCRM 8.x - Click-to-call, call tracking, voicemail, and more. Now with SuiteCRM 8.x compatibility.',
     'version' => '1.0.0',
     'author' => 'Wembassy',
     'is_uninstallable' => true,
     'type' => 'module',
     'acceptable_sugar_versions' => array(
         'regex_matches' => array(
-            '7\.\d+\.\d+',
-            '8\.\d+\.\d+',
+            '8\.\d+\.\d+',  // SuiteCRM 8.x
+            '7\.\d+\.\d+',  // SuiteCRM 7.x (legacy)
         ),
     ),
     'acceptable_sugar_flavors' => array(
@@ -27,36 +28,26 @@ $manifest = array(
         'PRO',
         'ENT',
         'CORP',
+        'ULT',
     ),
     'dependencies' => array(
         array(
             'id_name' => 'suitecrm_version',
-            'version' => '7.0.0'
+            'version' => '7.10.0',
         ),
     ),
-);
-
-$installdefs = array(
-    'id' => 'SweetDialer',
-    'copy' => array(
-        array(
-            'from' => '<basepath>/custom',
-            'to' => 'custom',
-        ),
-        array(
-            'from' => '<basepath>/modules',
-            'to' => 'modules',
-        ),
+    'copy_files' => array(
+        'from_dir' => '',
+        'to_dir' => '',
+        'force_copy' => array(),
     ),
-    'pre_install' => array(
-        '<basepath>/ModuleInstall/pre_install.php',
+    'post_execute' => array(
+        0 => '<basepath>/ModuleInstall/install.php',
     ),
-    'post_install' => array(
-        '<basepath>/ModuleInstall/install.php',
+    'pre_execute' => array(
+        0 => '<basepath>/ModuleInstall/pre_install.php',
     ),
     'post_uninstall' => array(
-        '<basepath>/ModuleInstall/uninstall.php',
+        0 => '<basepath>/ModuleInstall/uninstall.php',
     ),
-    'beans' => array(),
-    'language' => array(),
 );
