@@ -1,0 +1,28 @@
+/**
+ * S-099: Ringtone Player Styles
+ */
+
+.ringtone-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    animation: ringtone-pulse 1.5s ease-in-out infinite;
+    margin-right: 8px;
+}
+
+@keyframes ringtone-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ringtone-playing {
+    animation: ringtone-glow 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes ringtone-glow {
+    from { box-shadow: 0 0 5px #667eea; }
+    to { box-shadow: 0 0 20px #667eea, 0 0 30px #764ba2; }
+}
