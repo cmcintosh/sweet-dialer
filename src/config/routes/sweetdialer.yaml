@@ -1,0 +1,57 @@
+# SweetDialer Symfony Routes - SuiteCRM 8.x Compatibility
+# Place in: config/routes/sweetdialer.yaml
+
+sweetdialer_voice_webhook:
+    path: /voice-webhook
+    controller: Wembassy\SweetDialer\Controller\WebhookController::voiceWebhook
+    methods: [POST, GET]
+
+sweetdialer_status_callback:
+    path: /status-callback
+    controller: Wembassy\SweetDialer\Controller\WebhookController::statusCallback
+    methods: [POST]
+
+sweetdialer_recording_callback:
+    path: /recording-callback
+    controller: Wembassy\SweetDialer\Controller\WebhookController::recordingCallback
+    methods: [POST]
+
+sweetdialer_transfer_warm:
+    path: /api/transfer-warm
+    controller: Wembassy\SweetDialer\Controller\TransferController::warmTransfer
+    methods: [POST]
+    
+sweetdialer_transfer_cold:
+    path: /api/transfer-cold
+    controller: Wembassy\SweetDialer\Controller\TransferController::coldTransfer
+    methods: [POST]
+
+sweetdialer_conference_join:
+    path: /api/conference/join
+    controller: Wembassy\SweetDialer\Controller\ConferenceController::join
+    methods: [GET, POST]
+
+sweetdialer_conference_control:
+    path: /api/conference/control
+    controller: Wembassy\SweetDialer\Controller\ConferenceController::control
+    methods: [POST]
+
+sweetdialer_voicemail_fetch:
+    path: /api/voicemail/fetch
+    controller: Wembassy\SweetDialer\Controller\VoicemailController::fetch
+    methods: [GET]
+
+sweetdialer_dashboard_data:
+    path: /api/dashboard/data
+    controller: Wembassy\SweetDialer\Controller\DashboardController::data
+    methods: [GET]
+
+sweetdialer_analytics_data:
+    path: /api/analytics/data
+    controller: Wembassy\SweetDialer\Controller\AnalyticsController::data
+    methods: [GET]
+    
+sweetdialer_export:
+    path: /api/export
+    controller: Wembassy\SweetDialer\Controller\ExportController::export
+    methods: [GET, POST]
